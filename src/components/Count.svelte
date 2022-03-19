@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte'
+  import AnkiDroidJS from '../utils/ankiDroid'
 
   let newCardCount = 0
   let learnCardCount = 0

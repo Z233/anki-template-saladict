@@ -2,9 +2,9 @@ export declare global {
   interface Window {
     AnkiDroidJS: {
       init(jsonData?: string): string
-      ankiGetNewCardCount(): ?string
-      ankiGetLrnCardCount(): ?string
-      ankiGetRevCardCount(): ?string
+      ankiGetNewCardCount(): string | undefined
+      ankiGetLrnCardCount(): string | undefined
+      ankiGetRevCardCount(): string | undefined
       ankiGetETA(): number
       ankiGetCardMark(): boolean
       ankiGetCardFlag(): number

@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply flex h-screen w-screen;
+}
+
+body #content {
+  @apply flex-grow flex;
+}
+
+body #qa {
+  @apply flex-grow;
+}
+
+button, .cursor-pointer {
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+[lang=en] {
+  hyphens: auto;
+}
+
+span.highlight {
+  @apply text-primary dark:text-primary-dark;
+}
