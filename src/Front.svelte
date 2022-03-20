@@ -8,25 +8,28 @@
 
   let clozeInputCount = 0
 
-  const ContextCloze =
-    'To avoid {{c1::interference-driven}} {{c1::churn}} and recurring annoyance in your review sessions, you should strive to write prompts which you can almost always answer correctly.'
+  // const ContextCloze =
+  //   'To avoid {{c1::interference-driven}} {{c1::churn}} and recurring annoyance in your review sessions, you should strive to write prompts which you can almost always answer correctly.'
+
+  const ContextCloze = `She walks in {{c1::beauty}}, like the night`
 
   $: ContextClozeHTML = ContextCloze.replace(
     /{{c\d::(.*?)}}/gs,
-    (_, word) =>
-      `<span id="${word}" class="inline-flex flex-col">${
-        (async () => {
+    (_, word) => {
+      clozeInputCount++
+      return `<span id="${word}" class="inline-flex flex-col">${
+        (async (clozeInputCount) => {
           await tick()
-          clozeInputCount++
           new ClozeInput({
             target: document.getElementById(word),
             props: {
               word: word,
-              autofocus: clozeInputCount === 1 
+              autofocus: clozeInputCount === 1
             },
           })
-        })() && ''
+        })(clozeInputCount) && ''
       }</span>`
+    }
   )
 
   const translations = [
@@ -49,7 +52,7 @@
   <Count />
   <Timer />
   <div class="grow p-8 flex flex-col">
-    <p lang="en">
+    <p lang="en" class=" leading-7">
       {@html `${ContextClozeHTML}`}
     </p>
     <div class="mt-6 grow">

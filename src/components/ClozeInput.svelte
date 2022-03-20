@@ -16,9 +16,27 @@
     ? word
     : input
 
+  function spellCheck() {
+    const differenceRanges = []
+    const length = Math.max(word.length, input.length)
+
+    for (let i = 0, j = 0; i < length && j < length; i++, j++) {
+      while (word[j] && input[j] && word[j] !== input[j]) j++
+      if (!word[j] || !input[j]) {
+        differenceRanges.push([i, length])
+        break
+      }
+      if (i !== j) differenceRanges.push([i, j])
+      i = j
+    }
+
+    console.log(differenceRanges)
+  }
+
   function handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
-      isSpellChecking = true
+      // isSpellChecking = true
+      spellCheck()
     }
   }
 
