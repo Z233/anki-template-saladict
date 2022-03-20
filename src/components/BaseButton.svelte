@@ -1,12 +1,14 @@
-<script>
+<script lang="ts">
+  type ButtonType = 'primary' | 'secondly' | 'error'
+
   export let className = ''
-  export let type = 'primary'
+  export let type: ButtonType = 'primary'
 
   const buttonTypes = {
     primary: 'bg-primary dark:bg-primary-dark',
     secondly: 'bg-secondly dark:bg-secondly-dark',
     error: 'bg-red-600 dark:bg-red-800',
-  } 
+  }
 </script>
 
 <button

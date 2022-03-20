@@ -14,14 +14,23 @@ body #qa {
   @apply flex-grow;
 }
 
-button, .cursor-pointer {
-  -webkit-tap-highlight-color:rgba(0,0,0,0);
+button,
+.cursor-pointer {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-[lang=en] {
+[lang='en'] {
   hyphens: auto;
 }
 
 span.highlight {
   @apply text-primary dark:text-primary-dark;
+}
+
+span.wrong {
+  @apply bg-red-200 line-through;
+}
+
+span.correct {
+  @apply bg-green-200 underline;
 }

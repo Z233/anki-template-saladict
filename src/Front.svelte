@@ -3,34 +3,12 @@
   import Count from './components/Count.svelte'
   import Tag from './components/Tag.svelte'
   import Timer from './components/Timer.svelte'
-  import ClozeInput from './components/ClozeInput.svelte'
-  import { tick } from 'svelte'
+  import Cloze from './components/Cloze.svelte'
 
-  let clozeInputCount = 0
+  const ContextCloze =
+    'To avoid {{c1::churn}} {{c1::churn}} and recurring annoyance in your review sessions, you should strive to write prompts which you can almost always answer correctly.'
 
-  // const ContextCloze =
-  //   'To avoid {{c1::interference-driven}} {{c1::churn}} and recurring annoyance in your review sessions, you should strive to write prompts which you can almost always answer correctly.'
-
-  const ContextCloze = `She walks in {{c1::beauty}}, like the night`
-
-  $: ContextClozeHTML = ContextCloze.replace(
-    /{{c\d::(.*?)}}/gs,
-    (_, word) => {
-      clozeInputCount++
-      return `<span id="${word}" class="inline-flex flex-col">${
-        (async (clozeInputCount) => {
-          await tick()
-          new ClozeInput({
-            target: document.getElementById(word),
-            props: {
-              word: word,
-              autofocus: clozeInputCount === 1
-            },
-          })
-        })(clozeInputCount) && ''
-      }</span>`
-    }
-  )
+  // const ContextCloze = `She walks in {{c1::beauty}}, like the night`
 
   const translations = [
     {
@@ -52,9 +30,7 @@
   <Count />
   <Timer />
   <div class="grow p-8 flex flex-col">
-    <p lang="en" class=" leading-7">
-      {@html `${ContextClozeHTML}`}
-    </p>
+    <Cloze contextCloze={ContextCloze} />
     <div class="mt-6 grow">
       <Tag>翻译</Tag>
       <div class="mt-3 space-y-2">
