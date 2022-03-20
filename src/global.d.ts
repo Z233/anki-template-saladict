@@ -58,5 +58,36 @@ export declare global {
       ankiEnableVerticalScrollbar(scroll: boolean)
       ankiSearchCardWithCallback(query: string)
     }
+    Persistence: {
+      isAvailable(): boolean
+      /**
+       * Removes all previously persisted key-value pairs.
+       */
+      clear(): void
+      /**
+       * Retrieves the value associated with the key. If no value is associated to the given key, null is returned.
+       */
+      getItem(key: string): ?any
+      /**
+       * Retrieves the value associated with a default key.
+       */
+      getItem(): ?any
+      /**
+       * Persists the key-value pair.
+       */
+      setItem(key: string, value: any): void
+      /**
+       * Persists the value using a default key.
+       */
+      setItem(value: any): void
+      /**
+       * Removes the value associated with the key. If no value is associated to the given key, nothing happens.
+       */
+      removeItem(key: string): void
+      /**
+       * Removes the value associated with a default key.
+       */
+      removeItem(): void
+    }
   }
 }

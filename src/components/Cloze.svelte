@@ -3,31 +3,30 @@
     setWord: (word: string, arg1: WordStatus) => void
   }
   export type WordStatus = {
-    isChecked: boolean
-    isCorrect: boolean
+    isInput?: boolean
+    isChecked?: boolean
+    isCorrect?: boolean
+    checkAnswer?: () => void
   }
 </script>
 
 <script lang="ts">
   import ClozeInput from './ClozeInput.svelte'
-  import { tick } from 'svelte'
+  import AudioIcon from './AudioIcon.svelte'
+  import { tick, createEventDispatcher } from 'svelte'
 
   export let contextCloze = ''
 
+  const dispatch = createEventDispatcher()
+
   const clozeContext = new Map<'cloze', ClozeContext>()
-  const wordsStatus = new Map<string, WordStatus>()
+  const wordsMap = new Map<string, WordStatus>()
   clozeContext.set('cloze', {
-    setWord: (
-      word: string,
-      { isChecked = false, isCorrect = false }
-    ) => {
-      wordsStatus.set(word, { isChecked, isCorrect })
+    setWord: (word: string, status: WordStatus) => {
+      if (!wordsMap.has(word)) wordsMap.set(word, status)
+      else wordsMap.set(word, { ...wordsMap.get(word), ...status })
     },
   })
-
-  $: {
-    console.log(wordsStatus)
-  }
 
   let clozeInputCount = 0
 
@@ -35,25 +34,46 @@
     /{{c\d::(.*?)}}/gs,
     (_, word) => {
       clozeInputCount++
-      return `<span class="${word} inline-flex flex-col">${
-        (async (clozeInputCount) => {
+      const uniqueId = clozeInputCount
+      return `<span id="${uniqueId}" class="inline-flex flex-col">${
+        (async (clozeInputCount, uniqueId) => {
           await tick()
           new ClozeInput({
-            target: document.querySelectorAll(`.${word}`)[
-              clozeInputCount - 1
-            ],
+            target: document.querySelector(`[id='${uniqueId}']`),
             props: {
               word: word,
               autofocus: clozeInputCount === 1,
+              key: clozeInputCount,
             },
             context: clozeContext,
           })
-        })(clozeInputCount) && ''
+        })(clozeInputCount, uniqueId) && ''
       }</span>`
     }
   )
+
+  export const showAnswer = () => {
+    Array.from(wordsMap.values()).forEach((x) => x.checkAnswer())
+    return isAllCorrect()
+  }
+
+  const isAllInput = () =>
+    Array.from(wordsMap.values()).every(({ isInput }) => isInput)
+
+  const isAllCorrect = () =>
+    Array.from(wordsMap.values()).every(({ isCorrect }) => isCorrect)
+
+  function handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      if (!isAllInput()) return
+      for (let [word, { checkAnswer }] of wordsMap) {
+        checkAnswer()
+      }
+      dispatch('checked', isAllCorrect())
+    }
+  }
 </script>
 
-<p lang="en" class=" leading-7">
+<p on:keydown={handleKeyDown} lang="en" class=" leading-7">
   {@html contextClozeHTML}
 </p>
