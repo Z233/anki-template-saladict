@@ -12,7 +12,6 @@
 
 <script lang="ts">
   import ClozeInput from './ClozeInput.svelte'
-  import AudioIcon from './AudioIcon.svelte'
   import { tick, createEventDispatcher } from 'svelte'
 
   export let contextCloze = ''
@@ -31,7 +30,7 @@
   let clozeInputCount = 0
 
   $: contextClozeHTML = contextCloze.replace(
-    /{{c\d::(.*?)}}/gs,
+    /{+c\d::(.*?)}+/gs,
     (_, word) => {
       clozeInputCount++
       const uniqueId = clozeInputCount

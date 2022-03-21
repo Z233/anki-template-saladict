@@ -1,5 +1,9 @@
+import type { Card } from "./utils/card"
+
 export declare global {
   interface Window {
+    card: Card,
+    // Anki Droid API
     AnkiDroidJS: {
       init(jsonData?: string): string
       ankiGetNewCardCount(): string | undefined

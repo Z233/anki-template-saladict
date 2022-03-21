@@ -972,6 +972,11 @@ svelte-hmr@^0.14.9:
   resolved "https://registry.npmmirror.com/svelte-hmr/-/svelte-hmr-0.14.11.tgz#63d532dc9c2c849ab708592f034765fa2502e568"
   integrity sha512-R9CVfX6DXxW1Kn45Jtmx+yUe+sPhrbYSUp7TkzbW0jI5fVPn6lsNG9NEs5dFg5qRhFNAoVdRw5qQDLALNKhwbQ==
 
+svelte-keyboard@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.npmmirror.com/svelte-keyboard/-/svelte-keyboard-0.4.0.tgz#25d9cc11d64b7c5b4dbe077ce5f43acff5fb5d30"
+  integrity sha512-r3aNBgwX3d5BjZQi+ZPq5UufkC3DsCpupBNgj31oMzK9T8yMGX43hb04LyCwN03NDJ42TIULH26VlCW6jsgjiw==
+
 svelte-preprocess@^4.0.0, svelte-preprocess@^4.9.8:
   version "4.10.4"
   resolved "https://registry.npmmirror.com/svelte-preprocess/-/svelte-preprocess-4.10.4.tgz#308a410266bfc55b4e608da8d552b63580141260"

@@ -23,5 +23,7 @@
     "typescript": "^4.5.4",
     "vite": "^2.8.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "svelte-keyboard": "^0.4.0"
+  }
 }
