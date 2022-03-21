@@ -24,6 +24,7 @@
     "vite": "^2.8.0"
   },
   "dependencies": {
+    "mitt": "^3.0.0",
     "svelte-keyboard": "^0.4.0"
   }
 }

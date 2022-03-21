@@ -1,8 +1,10 @@
 <script lang="ts" context="module">
   export type ClozeContext = {
     setWord: (word: string, arg1: WordStatus) => void
+    setIsAnyFocus: (state: boolean) => void
   }
   export type WordStatus = {
+    isFocus?: boolean
     isInput?: boolean
     isChecked?: boolean
     isCorrect?: boolean
@@ -24,6 +26,13 @@
     setWord: (word: string, status: WordStatus) => {
       if (!wordsMap.has(word)) wordsMap.set(word, status)
       else wordsMap.set(word, { ...wordsMap.get(word), ...status })
+    },
+    setIsAnyFocus(state: boolean) {
+      if (state) {
+        dispatch('focus')
+      } else {
+        dispatch('blur')
+      }
     },
   })
 

@@ -4,7 +4,7 @@
   let element: HTMLElement | null = null
 
   export function play() {
-    const clickEvent = new Event('click')
+    const clickEvent = new MouseEvent('click')
     element.firstChild.dispatchEvent(clickEvent)
   }
 </script>

@@ -2,16 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    font-family: system-ui;
+  }
+}
+
 body {
   @apply flex h-screen w-screen;
 }
 
-body #content {
-  @apply flex-grow flex;
-}
-
-body #qa {
-  @apply flex-grow;
+body > #content {
+  display: none;
 }
 
 button,

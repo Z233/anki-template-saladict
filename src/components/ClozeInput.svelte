@@ -3,19 +3,21 @@
   import { slide } from 'svelte/transition'
   import type { ClozeContext, WordStatus } from './Cloze.svelte'
   import { spellCheck } from '../utils/helper'
+  import { emitter } from '../utils/emitter'
 
   export let key = 0
   export let word = ''
   export let autofocus = false
 
   const clozeContext: ClozeContext = getContext('cloze')
-  const { setWord } = clozeContext
+  const { setWord, setIsAnyFocus } = clozeContext
   const setThisWord = (status: WordStatus) =>
     setWord(word + key, status)
 
   let isSpellChecking = false
   let isShowAnswer = false
   let isCorrect = false
+  let isFocus = false
 
   let input = ''
   let inputWidth = 0
@@ -24,7 +26,7 @@
 
   $: setThisWord({
     isInput: !!input,
-    checkAnswer,
+    isFocus,
   })
 
   const checkRet = {
@@ -49,7 +51,21 @@
     })
   }
 
+  emitter.on('keydown', (e: CustomEvent) => {
+    if (!isFocus) return
+    if (e.detail === 'Backspace') {
+      input = input.slice(0, -1)
+    } else if (e.detail === 'Enter') {
+    } else {
+      input += e.detail
+    }
+  })
+
   onMount(() => {
+    if (autofocus) {
+      isFocus = true
+      setIsAnyFocus(true)
+    }
     inputOriginWidth = inputWidth
     setThisWord({
       checkAnswer,
@@ -65,9 +81,11 @@
 >
   <!-- svelte-ignore a11y-autofocus -->
   <input
-    on:keydown
-    tabindex={key}
     bind:value={input}
+    on:keydown
+    on:focus={() => ((isFocus = true), setIsAnyFocus(true))}
+    on:blur={() => ((isFocus = false), setIsAnyFocus(false))}
+    tabindex={key}
     {autofocus}
     type="text"
     spellcheck="false"

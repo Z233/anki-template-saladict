@@ -10,9 +10,12 @@
 
   // @ts-ignore
   import Keyboard from 'svelte-keyboard'
+  import { slide } from 'svelte/transition'
+  import { expoOut } from 'svelte/easing'
 
   import { loadPersistence } from './utils/persistence'
   import { getCard } from './utils/card'
+  import { emitter } from './utils/emitter'
 
   const {
     ContextCloze,
@@ -28,6 +31,7 @@
   // easy: 4, good: 3, hard: 2, bad: 1
   let state: 1 | 2 | 3 | 4 = 3
 
+  let isFocus = false
   let isCorrect = false
   let isShowHint = false
   let isShowAnswer = false
@@ -60,9 +64,8 @@
     }, 300)
   }
 
-  function handleKeyDown(e) {
-    console.log(e)
-
+  function handleKeyDown(e: CustomEvent) {
+    emitter.emit('keydown', e)
   }
 
   function showAnswer() {
@@ -77,6 +80,8 @@
   <div class="grow px-4 pb-8 pt-6 flex flex-col">
     <Cloze
       bind:this={cloze}
+      on:focus={() => (isFocus = true)}
+      on:blur={() => (isFocus = false)}
       on:checked={(e) => handleChecked(e.detail)}
       contextCloze={ContextCloze}
     />
@@ -118,5 +123,9 @@
     </div>
   </div>
 
-  <Keyboard on:keydown={handleKeyDown} />
+  {#if isFocus}
+    <div transition:slide={{ delay: 200, easing: expoOut }}>
+      <Keyboard on:keydown={handleKeyDown} />
+    </div>
+  {/if}
 </div>
