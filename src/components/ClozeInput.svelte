@@ -3,7 +3,6 @@
   import { slide } from 'svelte/transition'
   import type { ClozeContext, WordStatus } from './Cloze.svelte'
   import { spellCheck } from '../utils/helper'
-  import { debounce } from 'lodash'
 
   export let key = 0
   export let word = ''

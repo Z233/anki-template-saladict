@@ -6,11 +6,14 @@
   import Cloze from './components/Cloze.svelte'
 
   import { loadPersistence } from './utils/persistence'
-  import AudioIcon from './components/AudioIcon.svelte'
 
   loadPersistence()
 
+  // easy: 4, good: 3, hard: 2, bad: 1
+  let state = 3
+
   let isCorrect = false
+  let isShowHint = false
   let isShowAnswer = false
   let cloze: Cloze | null = null
 
@@ -26,7 +29,16 @@
 
   function handleShowAnswer() {
     isCorrect = cloze.showAnswer()
+    state = isCorrect ? (isShowHint ? 2 : 3) : 1
     showAnswer()
+  }
+
+  function handleShowHint() {
+    isShowHint = true
+  }
+
+  function handleNextCard() {
+    window.Persistence.setItem(state)
   }
 
   function showAnswer() {
@@ -59,6 +71,9 @@
       on:checked={(e) => handleChecked(e.detail)}
       contextCloze={ContextCloze}
     />
+    <a href="about:blank" class="text-sm mt-1 text-gray-300"
+      >—— HedgeDoc - Collaborative markdown notes</a
+    >
     <div class="mt-6 grow">
       <Tag>翻译</Tag>
       <div class="mt-3 space-y-2">
@@ -77,16 +92,20 @@
     </div>
     <div class="items-end space-y-3">
       {#if isShowAnswer}
-        <BaseButton className="w-full">下一个</BaseButton>
+        <BaseButton on:click={handleNextCard} className="w-full"
+          >下一个</BaseButton
+        >
       {:else}
         <BaseButton on:click={handleShowAnswer} className="w-full"
           >显示答案</BaseButton
         >
-        <BaseButton
-          on:click={handleShowAnswer}
-          type="secondly"
-          className="w-full">提示一下</BaseButton
-        >
+        {#if !isShowHint}
+          <BaseButton
+            on:click={handleShowHint}
+            type="secondly"
+            className="w-full">提示一下</BaseButton
+          >
+        {/if}
       {/if}
     </div>
   </div>
