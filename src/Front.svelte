@@ -20,6 +20,7 @@
   const {
     ContextCloze,
     Audio: AudioHTML,
+    TextAudio: TextAudioHTML,
     Title,
     Translation: TransitionHTML,
     Note: NoteHTML,
@@ -39,6 +40,7 @@
 
   let cloze: Cloze | null = null
   let audio: Audio | null = null
+  let textAudio: Audio | null = null
 
   function handleChecked(isAllCorrect: boolean) {
     isCorrect = isAllCorrect
@@ -49,6 +51,7 @@
     isCorrect = cloze.showAnswer()
     state = isCorrect ? (isShowHint ? 2 : 3) : 1
     showAnswer()
+    textAudio && textAudio.play()
   }
 
   function handleShowHint() {
@@ -74,7 +77,12 @@
 </script>
 
 <div class="h-full w-full flex flex-col bg-white dark:bg-gray-900">
-  <Audio bind:this={audio} html={AudioHTML} />
+  {#if !!AudioHTML.trim()}
+    <Audio bind:this={audio} html={AudioHTML} />
+  {/if}
+  {#if !!TextAudioHTML.trim()}
+    <Audio bind:this={textAudio} html={TextAudioHTML} />
+  {/if}
   <Count />
   <Timer />
   <div class="grow px-4 pb-8 pt-6 flex flex-col">
@@ -112,7 +120,7 @@
         <BaseButton on:click={handleShowAnswer} className="w-full"
           >显示答案</BaseButton
         >
-        {#if !!AudioHTML.trim() && !isShowHint}
+        {#if audio && !isShowHint}
           <BaseButton
             on:click={handleShowHint}
             type="secondly"

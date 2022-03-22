@@ -11,6 +11,7 @@ export interface Card {
   Url: string
   Favicon: string
   Audio: string
+  TextAudio: string
 }
 
 const dummyCard: Card = {
@@ -32,7 +33,8 @@ const dummyCard: Card = {
   // </a>`,
   // AnkiDroid
   // Audio: `<a class='replaybutton' href="playsound:file:///storage/emulated/0/ankidroid/collection.media/youdao-fd7ea1ed-66d8e31d-ac038b88-65939f1b-42a4e7f4.mp3"><span><svg viewbox="0 0 32 32"><polygon points="11,25 25,16 11,7"/>replay</svg></span></a>`,
-  Audio: `<a onclick="console.log('sound played')" />`,
+  Audio: `<a onclick="console.log('sentence audio played')" />`,
+  TextAudio: `<a onclick="console.log('text audio played')" />`,
 }
 
-export const getCard = () => (isDev ? dummyCard : window.card)
+export const getCard = () => (isDev ? dummyCard : window._card)

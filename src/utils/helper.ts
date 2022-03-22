@@ -12,6 +12,7 @@ export function spellCheck(input: string, word: string) {
       isCorrect = false
     }
     if (!word[j] || !input[j]) {
+      isCorrect = false
       inputHTML += `<span class="wrong">${input.substring(
         i,
         length

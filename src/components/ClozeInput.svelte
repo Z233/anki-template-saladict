@@ -4,6 +4,7 @@
   import type { ClozeContext, WordStatus } from './Cloze.svelte'
   import { spellCheck } from '../utils/helper'
   import { emitter } from '../utils/emitter'
+  import { tick } from 'svelte/internal'
 
   export let key = 0
   export let word = ''
@@ -19,6 +20,7 @@
   let isCorrect = false
   let isFocus = false
 
+  let inputElement: HTMLInputElement | null = null
   let input = ''
   let inputWidth = 0
   let inputOriginWidth = 0
@@ -51,14 +53,45 @@
     })
   }
 
-  emitter.on('keydown', (e: CustomEvent) => {
+  emitter.on('keydown', async (e: CustomEvent) => {
     if (!isFocus) return
-    if (e.detail === 'Backspace') {
-      input = input.slice(0, -1)
-    } else if (e.detail === 'Enter') {
+
+    const key = e.detail === 'Space' ? ' ' : e.detail
+    let selectionStart = inputElement.selectionStart,
+      selectionEnd = inputElement.selectionEnd
+
+    if (key === 'Backspace') {
+      // selection within string
+      if (selectionStart !== selectionEnd) {
+        input =
+          input.slice(0, selectionStart) + input.slice(selectionEnd)
+        selectionEnd = selectionStart
+      } else {
+        input =
+          input.slice(0, selectionStart - 1) +
+          input.slice(selectionStart)
+        selectionStart = selectionStart - 1
+        selectionEnd = selectionStart
+      }
+    } else if (key === 'Enter') {
     } else {
-      input += e.detail
+      input =
+        input.slice(0, selectionStart) +
+        key +
+        input.slice(selectionEnd)
+
+      if (selectionStart === selectionEnd) {
+        selectionStart = selectionStart + 1
+        selectionEnd = selectionEnd + 1
+      } else {
+        selectionStart = selectionStart + 1
+        selectionEnd = selectionStart
+      }
     }
+
+    await tick()
+    inputElement.selectionStart = selectionStart
+    inputElement.selectionEnd = selectionEnd
   })
 
   onMount(() => {
@@ -75,14 +108,14 @@
 
 <span
   on:keydown
-  class={`inline-block relative text-gray-900 ${
-    isSpellChecking && isCorrect ? 'text-success' : ''
-  }`}
+  class={`inline-block relative ${
+    isShowAnswer ? 'text-red-500' : 'text-gray-900'
+  } ${isSpellChecking && isCorrect ? 'text-success' : ''}`}
 >
   <!-- svelte-ignore a11y-autofocus -->
   <input
+    bind:this={inputElement}
     bind:value={input}
-    on:keydown
     on:focus={() => ((isFocus = true), setIsAnyFocus(true))}
     on:blur={() => ((isFocus = false), setIsAnyFocus(false))}
     tabindex={key}
@@ -102,8 +135,7 @@
     style={`visibility: ${
       isSpellChecking || isShowAnswer ? 'visible' : 'hidden'
     }`}
-    class=" whitespace-pre absolute left-0 px-1
-    "
+    class={` whitespace-pre absolute left-0 px-1`}
   >
     {#if isSpellChecking}
       {@html checkRet.inputHTML}
