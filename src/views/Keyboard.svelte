@@ -1,14 +1,16 @@
 <script>
+// @ts-nocheck
+
   import { createEventDispatcher } from 'svelte'
 
-  import standard from 'svelte-keyboard/layouts/standard.js'
-  import crossword from 'svelte-keyboard/layouts/crossword.js'
-  import wordle from 'svelte-keyboard/layouts/wordle.js'
-  import backspaceSVG from 'svelte-keyboard/svg/backspace.js'
-  import enterSVG from 'svelte-keyboard/svg/enter.js'
+  import standard from 'svelte-keyboard/layouts/standard'
+  import crossword from 'svelte-keyboard/layouts/crossword'
+  import wordle from 'svelte-keyboard/layouts/wordle'
+  import backspaceSVG from 'svelte-keyboard/svg/backspace'
+  import enterSVG from 'svelte-keyboard/svg/enter'
 
   // exposed props
-  export let custom
+  export let custom = false
   export let layout = 'standard'
   export let noSwap = []
   export let keyClass = {}
@@ -34,7 +36,7 @@
   const unique = (arr) => [...new Set(arr)]
 
   function handleKeyDown(e) {
-    e.preventDefault()
+    e.cancelable && e.preventDefault()
     const target = e.path.find(
       (el) => el.tagName === 'BUTTON' && el.classList.contains('key')
     )
@@ -51,7 +53,7 @@
         output = value.toUpperCase()
       dispatch('keydown', output)
     }
-    e.stopPropagation()
+    e.cancelable && e.stopPropagation()
     return false
   }
 
@@ -141,7 +143,7 @@
     color: var(--color, #111);
     border: var(--border, none);
     border-radius: var(--border-radius, 2px);
-    box-shadow: var(--box-shadow, none);
+    box-shadow: 0 0 0 0.125rem white;
     flex: var(--flex, 1);
     font-family: var(--font-family, sans-serif);
     font-size: var(--font-size, 20px);
