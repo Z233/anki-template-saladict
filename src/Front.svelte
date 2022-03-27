@@ -9,7 +9,7 @@
   import Dots from './components/Dots.svelte'
 
   // @ts-ignore
-  import Keyboard from 'svelte-keyboard'
+  import Keyboard from './views/Keyboard.svelte'
   import { slide } from 'svelte/transition'
   import { expoOut } from 'svelte/easing'
 
@@ -32,7 +32,7 @@
   // easy: 4, good: 3, hard: 2, bad: 1
   let state: 1 | 2 | 3 | 4 = 3
 
-  let isFocus = false
+  let isFocus = true
   let isCorrect = false
   let isShowHint = false
   let isShowAnswer = false
@@ -89,7 +89,7 @@
     <Cloze
       bind:this={cloze}
       on:focus={() => (isFocus = true)}
-      on:blur={() => (isFocus = false)}
+      on:blur={() => (isFocus = true)}
       on:checked={(e) => handleChecked(e.detail)}
       contextCloze={ContextCloze}
     />

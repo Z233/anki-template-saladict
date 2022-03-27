@@ -32,9 +32,9 @@
 </script>
 
 {#each transitions as item}
-  <div>
+  <div class="leading-6">
     <p>{item.content}</p>
-    <p class="text-gray-400 text-xs">
+    <p class="text-gray-400 text-sm mt-1">
       {item.title.toUpperCase()}
     </p>
   </div>

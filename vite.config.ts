@@ -29,6 +29,7 @@ export default defineConfig({
   plugins: [svelte()],
   server: {
     watch: {
+      ignored: ['!/node_modules/svelte-keyboard/**'],
       usePolling: true,
     },
   },
@@ -36,7 +37,7 @@ export default defineConfig({
     cssCodeSplit: false,
     rollupOptions: {
       input: {
-        front: resolve('src', 'front.ts') 
+        front: resolve('src', 'front.ts'),
       },
       output: {
         format: 'iife',
@@ -46,5 +47,8 @@ export default defineConfig({
       },
       plugins: [inlineSvelte(resolve('src', 'template.html'))],
     },
+  },
+  optimizeDeps: {
+    exclude: ['svelte-keyboard'],
   },
 })
