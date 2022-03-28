@@ -139,11 +139,11 @@
     line-height: 1;
     transform-origin: 50% 50%;
     user-select: none;
-    background: var(--background, #eee);
+    background: var(--button-background, #eee);
     color: var(--color, #111);
     border: var(--border, none);
     border-radius: var(--border-radius, 2px);
-    box-shadow: 0 0 0 0.125rem white;
+    box-shadow: 0 0 0 0.125rem var(--background, white);
     flex: var(--flex, 1);
     font-family: var(--font-family, sans-serif);
     font-size: var(--font-size, 20px);
@@ -184,6 +184,7 @@
 
   .page {
     display: none;
+    background: var(--background, none);
   }
 
   .page.visible {
