@@ -17,6 +17,7 @@
   import { getCard } from './utils/card'
   import { emitter } from './utils/emitter'
   import IconHint from './components/IconHint.svelte'
+  import IconCheck from './components/IconCheck.svelte'
 
   const {
     ContextCloze,
@@ -138,9 +139,11 @@
       transition:slide={{ delay: 200, easing: expoOut }}
     >
       <div
-        class=" border-t border-gray-200 px-3 py-2 text-xl text-gray-600"
+        class="flex justify-center items-center space-x-12 border-t 
+        border-gray-200 px-3 py-2 text-xl text-gray-600"
       >
-        <IconHint />
+        <IconHint className="h-6" />
+        <IconCheck className="h-5" />
       </div>
       <Keyboard
         on:keydown={handleKeyDown}
