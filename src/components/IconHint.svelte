@@ -1,22 +1,29 @@
-<script>
+<script lang="ts">
   import { fade } from 'svelte/transition'
+  import IconButton from './IconButton.svelte'
 
   export let className = ''
   export let hintContent = ''
+  export let onHint = Function.prototype
 
   let hintVisible = false
 
-  function showHint() {
+  function showHint(e: MouseEvent | TouchEvent) {
+    e.preventDefault()
+    onHint()
+    if (!hintContent.trim().length) return
     hintVisible = true
     setTimeout(() => {
       hintVisible = false
     }, 1000)
+    e.stopPropagation()
+    return false
   }
 </script>
 
-<span on:click={showHint} class="relative">
+<IconButton on:mousedown={showHint} on:touchstart={showHint}>
   <svg
-    class={`icon fill-current ${className}`}
+    class={`icon fill-current ${className} bg-transparent`}
     viewBox="0 0 1024 1024"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
@@ -56,13 +63,17 @@
   {#if hintVisible}
     <span
       transition:fade={{ duration: 100 }}
-      class="absolute -top-[calc(100%+1rem)] text-sm bg-black bg-opacity-70
-    text-white px-2 py-1 rounded left-1/2 -translate-x-1/2
-  after:absolute after:block after:w-0 after:h-0 
-  after:-translate-x-1/2 after:-bottom-2 after:left-1/2 
-  after:border-l-[.5rem] after:border-l-transparent after:border-r-[.5rem] after:border-r-transparent 
-  after:border-t-[.5rem] after:border-t-black after:border-opacity-70
-  ">{hintContent}</span
+      class="absolute z-20 -top-[calc(100%+1rem)] text-sm
+    text-white px-2 py-1 left-1/2 -translate-x-1/2"
+    >
+      <div
+        class="absolute inset-0 bg-black -z-10 rounded after:absolute 
+        after:block after:w-0 after:h-0 after:-translate-x-1/2 after:-bottom-1.5 
+        after:left-1/2 after:border-l-[.5rem] after:border-l-transparent 
+        after:border-r-[.5rem] after:border-r-transparent after:border-t-[.5rem] 
+        after:border-t-black"
+      />
+      {hintContent}</span
     >
   {/if}
-</span>
+</IconButton>

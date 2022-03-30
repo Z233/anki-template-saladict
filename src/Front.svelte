@@ -27,6 +27,7 @@
     Translation: TransitionHTML,
     Note: NoteHTML,
     Url,
+    Symbol,
   } = getCard()
 
   loadPersistence()
@@ -56,11 +57,6 @@
     textAudio && textAudio.play()
   }
 
-  function handleShowHint() {
-    audio.play()
-    isShowHint = true
-  }
-
   function handleNextCard() {
     dotsVisible = true
     setTimeout(() => {
@@ -73,8 +69,14 @@
     emitter.emit('keydown', e)
   }
 
+  function handleHint() {
+    isShowHint = true
+    textAudio.play()
+  }
+
   function showAnswer() {
     isShowAnswer = true
+    audio.play()
   }
 </script>
 
@@ -87,69 +89,63 @@
   {/if}
   <Count />
   <Timer />
-  <div class="grow px-4 pb-8 pt-6 flex flex-col">
-    <Cloze
-      bind:this={cloze}
-      on:focus={() => (isFocus = true)}
-      on:blur={() => (isFocus = true)}
-      on:checked={(e) => handleChecked(e.detail)}
-      contextCloze={ContextCloze}
-    />
-    <a href={Url} class="text-sm mt-1 text-gray-400">—— {Title}</a>
-    <div class="mt-6 grow">
-      <Tag>翻译</Tag>
-      <div class="mt-3 space-y-2">
-        <Transition html={TransitionHTML} />
-      </div>
-      {#if isShowAnswer && !!NoteHTML.trim()}
-        <div class="mt-3">
-          <Tag>笔记</Tag>
-          <div class="mt-3">
-            {@html NoteHTML}
-          </div>
+  <div class="grow pt-6 pb-4 flex flex-col">
+    <div class="grow pb-2 flex flex-col px-4">
+      <Cloze
+        bind:this={cloze}
+        on:focus={() => (isFocus = true)}
+        on:blur={() => (isFocus = false)}
+        on:checked={(e) => handleChecked(e.detail)}
+        contextCloze={ContextCloze}
+      />
+      <a href={Url} class="text-sm mt-1 text-gray-400">—— {Title}</a>
+      <div class="mt-6 grow">
+        <Tag>翻译</Tag>
+        <div class="mt-3 space-y-2">
+          <Transition html={TransitionHTML} />
         </div>
-      {/if}
-    </div>
-    <!-- <div class="items-end space-y-3 px-8">
-      {#if isShowAnswer}
-        {#if dotsVisible}
-          <Dots {state} />
+        {#if isShowAnswer && !!NoteHTML.trim()}
+          <div class="mt-3">
+            <Tag>笔记</Tag>
+            <div class="mt-3">
+              {@html NoteHTML}
+            </div>
+          </div>
         {/if}
-        <BaseButton on:click={handleNextCard} className="w-full"
-          >下一个</BaseButton
-        >
-      {:else}
-        <BaseButton on:click={handleShowAnswer} className="w-full"
-          >显示答案</BaseButton
-        >
-        {#if audio && !isShowHint}
-          <BaseButton
-            on:click={handleShowHint}
-            type="secondly"
-            className="w-full">提示一下</BaseButton
+      </div>
+      <div class="items-end space-y-3 px-8">
+        {#if isShowAnswer}
+          {#if dotsVisible}
+            <Dots {state} />
+          {/if}
+          <BaseButton on:click={handleNextCard} className="w-full"
+            >下一个</BaseButton
           >
         {/if}
-      {/if}
-    </div> -->
-  </div>
-
-  {#if isFocus}
-    <div
-      class="px-1"
-      transition:slide={{ delay: 200, easing: expoOut }}
-    >
-      <div
-        class="flex justify-center items-center space-x-12 border-t 
-        border-gray-200 px-3 py-2 text-xl text-gray-600"
-      >
-        <IconHint className="h-6" />
-        <IconCheck className="h-5" />
       </div>
-      <Keyboard
-        on:keydown={handleKeyDown}
-        --height="3rem"
-        --margin="0.25rem 0.125rem"
-      />
     </div>
-  {/if}
+    {#if isFocus}
+      <div
+        class="px-1"
+        transition:slide={{ delay: 200, easing: expoOut }}
+      >
+        <div
+          class="flex justify-around items-center border-t 
+        border-gray-200 px-24 py-2 text-xl text-gray-600"
+        >
+          <IconHint
+            hintContent={Symbol}
+            onHint={handleHint}
+            className="h-6"
+          />
+          <IconCheck onCheck={handleShowAnswer} className="h-6" />
+        </div>
+        <Keyboard
+          on:keydown={handleKeyDown}
+          --height="3rem"
+          --margin="0.25rem 0.125rem"
+        />
+      </div>
+    {/if}
+  </div>
 </div>

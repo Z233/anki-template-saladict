@@ -2,7 +2,7 @@ import type { Card } from "./utils/card"
 
 export declare global {
   interface Window {
-    card: Card,
+    _card: Card,
     // Anki Droid API
     AnkiDroidJS: {
       init(jsonData?: string): string
