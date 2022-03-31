@@ -9,7 +9,7 @@
 }
 
 body {
-  @apply flex h-screen w-screen;
+  @apply flex h-screen w-screen bg-white;
 }
 
 body > #content {

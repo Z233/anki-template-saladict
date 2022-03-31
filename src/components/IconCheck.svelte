@@ -2,7 +2,7 @@
   import IconButton from './IconButton.svelte'
 
   export let className = ''
-  export let onCheck = (...args: any): any => {}
+  export let onCheck = (e: MouseEvent | TouchEvent): void => {}
 </script>
 
 <IconButton on:mousedown={onCheck} on:touchstart={onCheck}>

@@ -15,7 +15,7 @@
     hintVisible = true
     setTimeout(() => {
       hintVisible = false
-    }, 1000)
+    }, 3000)
     e.stopPropagation()
     return false
   }

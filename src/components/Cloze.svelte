@@ -37,6 +37,7 @@
   })
 
   let clozeInputCount = 0
+  let clozeInputs: ClozeInput[] = []
 
   $: contextClozeHTML = contextCloze.replace(
     /{+c\d::(.*?)}+/gs,
@@ -46,7 +47,7 @@
       return `<span id="${uniqueId}" class="inline-flex flex-col">${
         (async (clozeInputCount, uniqueId) => {
           await tick()
-          new ClozeInput({
+          const clozeInput = new ClozeInput({
             target: document.querySelector(`[id='${uniqueId}']`),
             props: {
               word: word,
@@ -55,10 +56,18 @@
             },
             context: clozeContext,
           })
+          clozeInputs.push(clozeInput)
         })(clozeInputCount, uniqueId) && ''
       }</span>`
     }
   )
+
+  export const reset = () => {
+    clozeInputs.forEach((x) => x.$destroy())
+    clozeInputs = []
+    clozeInputCount = 0
+    wordsMap.clear()
+  }
 
   export const showAnswer = () => {
     Array.from(wordsMap.values()).forEach((x) => x.checkAnswer())

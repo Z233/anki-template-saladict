@@ -35,6 +35,7 @@
   // easy: 4, good: 3, hard: 2, bad: 1
   let state: 1 | 2 | 3 | 4 = 3
 
+  let isReset = false
   let isFocus = true
   let isCorrect = false
   let isShowHint = false
@@ -45,6 +46,11 @@
   let audio: Audio | null = null
   let textAudio: Audio | null = null
 
+  function showAnswer() {
+    isShowAnswer = true
+    audio.play()
+  }
+
   function handleChecked(isAllCorrect: boolean) {
     isCorrect = isAllCorrect
     showAnswer()
@@ -52,12 +58,13 @@
 
   function handleShowAnswer() {
     isCorrect = cloze.showAnswer()
-    state = isCorrect ? (isShowHint ? 2 : 3) : 1
+    state = isReset ? state : isCorrect ? (isShowHint ? 2 : 3) : 1
     showAnswer()
     textAudio && textAudio.play()
   }
 
   function handleNextCard() {
+    console.log('state', state)
     dotsVisible = true
     setTimeout(() => {
       window.Persistence.setItem(`signal:answer_ease${state}`)
@@ -74,9 +81,12 @@
     textAudio.play()
   }
 
-  function showAnswer() {
-    isShowAnswer = true
-    audio.play()
+  function handleResetInput() {
+    isReset = true
+    isShowAnswer = false
+    isCorrect = false
+    dotsVisible = false
+    cloze.reset()
   }
 </script>
 
@@ -117,6 +127,13 @@
         {#if isShowAnswer}
           {#if dotsVisible}
             <Dots {state} />
+          {/if}
+          {#if !isCorrect}
+            <BaseButton
+              type="secondly"
+              on:click={handleResetInput}
+              className="w-full">再试一次</BaseButton
+            >
           {/if}
           <BaseButton on:click={handleNextCard} className="w-full"
             >下一个</BaseButton
