@@ -69,7 +69,7 @@
     wordsMap.clear()
   }
 
-  export const showAnswer = () => {
+  export const checkAnswer = () => {
     Array.from(wordsMap.values()).forEach((x) => x.checkAnswer())
     return isAllCorrect()
   }

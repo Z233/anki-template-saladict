@@ -39,32 +39,31 @@
   let isFocus = true
   let isCorrect = false
   let isShowHint = false
-  let isShowAnswer = false
+  let isShowBack = false
   let dotsVisible = false
 
   let cloze: Cloze | null = null
   let audio: Audio | null = null
   let textAudio: Audio | null = null
 
-  function showAnswer() {
-    isShowAnswer = true
-    audio.play()
+  function showBack() {
+    isShowBack = true
+    audio && audio.play()
   }
 
   function handleChecked(isAllCorrect: boolean) {
     isCorrect = isAllCorrect
-    showAnswer()
+    showBack()
   }
 
   function handleShowAnswer() {
-    isCorrect = cloze.showAnswer()
+    isCorrect = cloze.checkAnswer()
     state = isReset ? state : isCorrect ? (isShowHint ? 2 : 3) : 1
-    showAnswer()
+    showBack()
     textAudio && textAudio.play()
   }
 
   function handleNextCard() {
-    console.log('state', state)
     dotsVisible = true
     setTimeout(() => {
       window.Persistence.setItem(`signal:answer_ease${state}`)
@@ -78,12 +77,12 @@
 
   function handleHint() {
     isShowHint = true
-    textAudio.play()
+    textAudio && textAudio.play()
   }
 
   function handleResetInput() {
     isReset = true
-    isShowAnswer = false
+    isShowBack = false
     isCorrect = false
     dotsVisible = false
     cloze.reset()
@@ -114,7 +113,7 @@
         <div class="mt-3 space-y-2">
           <Transition html={TransitionHTML} />
         </div>
-        {#if isShowAnswer && !!NoteHTML.trim()}
+        {#if isShowBack && !!NoteHTML.trim()}
           <div class="mt-3">
             <Tag>笔记</Tag>
             <div class="mt-3">
@@ -124,7 +123,7 @@
         {/if}
       </div>
       <div class="items-end space-y-3 px-8">
-        {#if isShowAnswer}
+        {#if isShowBack}
           {#if dotsVisible}
             <Dots {state} />
           {/if}
