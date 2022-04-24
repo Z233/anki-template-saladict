@@ -1,4 +1,5 @@
 <button
+  on:mousedown={(e) => e.preventDefault()}
   on:click
   class="relative before:top-1/2 before:left-1/2 before:w-9 before:h-9
   before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full
