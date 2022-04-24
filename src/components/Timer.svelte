@@ -1,12 +1,11 @@
-<script>
-import { onMount } from "svelte";
+<script lang="ts">
+  import { onMount } from 'svelte'
 
-
-  let timer = null
-  let start = null
+  let timer: HTMLElement | null = null
+  let start: number | null = null
   const DURATION = 10000
 
-  function step(timestamp) {
+  function step(timestamp: number) {
     if (start === undefined) start = timestamp
     const elapsed = timestamp - start
     timer.style.width =
@@ -19,7 +18,10 @@ import { onMount } from "svelte";
   })
 </script>
 
-<div class="w-full h-1 bg-gray-200 dark:bg-gray-700">
+<div
+  class="w-full h-1 bg-gray-200 dark:bg-gray-700 z-10 absolute top-0 left-0 
+  "
+>
   <div
     bind:this={timer}
     class="bg-primary dark:bg-primary-dark h-full w-0"

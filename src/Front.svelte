@@ -97,8 +97,8 @@
     <Audio bind:this={textAudio} html={TextAudioHTML} />
   {/if}
   <Count />
-  <Timer />
-  <div class="grow pt-6 pb-4 flex flex-col">
+  <div class="grow pt-7 pb-4 flex flex-col relative">
+    <Timer />
     <div class="grow pb-2 flex flex-col px-4">
       <Cloze
         bind:this={cloze}
