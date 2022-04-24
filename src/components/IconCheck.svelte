@@ -2,10 +2,10 @@
   import IconButton from './IconButton.svelte'
 
   export let className = ''
-  export let onCheck = (e: MouseEvent | TouchEvent): void => {}
+  export let onCheck = (e: MouseEvent): void => {}
 </script>
 
-<IconButton on:mousedown={onCheck} on:touchstart={onCheck}>
+<IconButton on:click={onCheck}>
   <svg
     class={`icon fill-current ${className}`}
     viewBox="0 0 1024 1024"

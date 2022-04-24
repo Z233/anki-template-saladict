@@ -21,7 +21,7 @@
   }
 </script>
 
-<IconButton on:mousedown={showHint} on:touchstart={showHint}>
+<IconButton on:click={showHint}>
   <svg
     class={`icon fill-current ${className} bg-transparent`}
     viewBox="0 0 1024 1024"
